@@ -1,0 +1,8 @@
+{
+  "name": "cloudinary-upload",
+  "version": "1.0.0",
+  "description": "Módulo reutilizable para subir archivos a Cloudinary",
+  "main": "index.js",
+  "keywords": ["cloudinary", "upload", "storage"],
+  "license": "MIT"
+}

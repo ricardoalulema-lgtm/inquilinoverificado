@@ -1,0 +1,79 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.rol == 'admin';
+    }
+
+    function isArrendador() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.rol == 'arrendador';
+    }
+
+    function isInquilino() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.rol == 'inquilino';
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /calificaciones/{calificacionId} {
+      allow read: if isArrendador()
+                || (isInquilino() && resource.data.hash_cedula_inquilino == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.hash_cedula)
+                || isAdmin();
+      allow create: if isArrendador() && request.resource.data.keys().hasAll([
+        'hash_cedula_inquilino', 'uid_arrendador', 'estrellas_pago',
+        'estrellas_cuidado', 'estrellas_comunicacion', 'comentario', 'prueba_url',
+        'nombre_arrendador', 'hash_cedula_arrendador', 'cedula_mascarada_arrendador',
+        'fecha_inicio_contrato', 'fecha_fin_contrato'
+      ]);
+      allow update: if isInquilino() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /tokens_solicitud/{tokenId} {
+      allow read: if isAuthenticated();
+      allow create: if isInquilino();
+      allow update: if isAuthenticated() && request.resource.data.usado == true && resource.data.usado == false;
+      allow delete: if isInquilino() && resource.data.hash_cedula_inquilino == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.hash_cedula;
+    }
+
+    match /invitaciones/{invitacionId} {
+      allow read: if true;
+      allow create: if isArrendador();
+      allow update: if isInquilino() || isAdmin();
+      allow delete: if isArrendador() || isInquilino() || isAdmin();
+    }
+
+    match /pagos/{pagoId} {
+      allow read: if isArrendador()
+                || (isInquilino() && resource.data.hash_cedula_inquilino == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.hash_cedula)
+                || isAdmin();
+      allow create: if isArrendador();
+      allow update: if isArrendador() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /vinculaciones/{vinculacionId} {
+      allow read: if isArrendador() || (isInquilino() && resource.data.uid_inquilino == request.auth.uid) || isAdmin();
+      allow create: if isArrendador() || isInquilino();
+      allow update: if isArrendador() || isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}

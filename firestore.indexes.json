@@ -1,0 +1,37 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "calificaciones",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "hash_cedula_inquilino", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "calificaciones",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "bloqueo_solicitado", "order": "ASCENDING" },
+        { "fieldPath": "fecha_solicitud_bloqueo", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "calificaciones",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid_arrendador", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "pagos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "hash_cedula_inquilino", "order": "ASCENDING" },
+        { "fieldPath": "uid_arrendador", "order": "ASCENDING" },
+        { "fieldPath": "fecha_pago", "order": "DESCENDING" }
+      ]
+    }
+  ]
+}
