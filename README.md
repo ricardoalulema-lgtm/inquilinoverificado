@@ -110,72 +110,7 @@ Plataforma de **referencias de arrendamiento verificadas**: los arrendadores cal
 
 ---
 
-## 3. Instalación en local
-
-### Requisitos
-
-- Node.js ≥ 18
-- [Firebase CLI](https://firebase.google.com/docs/cli): `npm install -g firebase-tools`
-- Una proyecto Firebase con **Authentication (Email/Password)** y **Firestore** habilitados
-- Una cuenta Cloudinary con un *upload preset* sin firmar (tipo `upload`, acceso `public`, folder `inquilinoverificado`)
-
-### Pasos
-
-```bash
-# 1. Clonar e instalar
-git clone https://github.com/<TU-USUARIO>/<REPO>.git
-cd <REPO>
-npm install
-
-# 2. Variables de entorno
-cp .env.example .env
-# Edita .env con las credenciales de tu proyecto Firebase y Cloudinary
-
-# 3. Servidor de desarrollo
-npm run dev
-# App en http://localhost:5173
-```
-
-### Comandos útiles
-
-```bash
-npm run dev      # servidor de desarrollo (Vite)
-npm run build    # build de producción en dist/
-npm run preview  # previsualizar el build localmente
-npm run lint     # lint con oxlint
-```
-
----
-
-## 4. Despliegue en la nube (Firebase Hosting)
-
-```bash
-# 1. Login y selección del proyecto
-firebase login
-firebase use --add          # selecciona tu proyecto
-
-# 2. Reglas de Firestore e índices compuestos
-firebase deploy --only firestore:rules,firestore:indexes
-
-# 3. Build + Hosting
-npm run build
-firebase deploy --only hosting
-```
-
-La app queda publicada en `https://<tu-proyecto>.web.app`. El SPA usa rewrites a `index.html` (configurado en `firebase.json`).
-
-### Cloud Functions (opcional)
-
-`functions/index.js` recalcula el promedio ponderado de calificaciones con un trigger `onCreate` sobre `calificaciones`:
-
-```bash
-cd functions && npm install && cd ..
-firebase deploy --only functions
-```
-
----
-
-## 5. Biblioteca de funciones
+## 3. Biblioteca de funciones
 
 ### `src/services/authService.js`
 
@@ -299,7 +234,7 @@ firebase deploy --only functions
 
 ---
 
-## 6. Estructura del proyecto
+## 4. Estructura del proyecto
 
 ```
 inquilinoverificado/
@@ -324,7 +259,7 @@ inquilinoverificado/
 
 ---
 
-## 7. Variables de entorno
+## 5. Variables de entorno
 
 ```bash
 VITE_FIREBASE_API_KEY=
@@ -339,6 +274,6 @@ VITE_CLOUDINARY_UPLOAD_PRESET=
 
 ---
 
-## 8. Licencia
+## 6. Licencia
 
 Proyecto privado. Todos los derechos reservados.
